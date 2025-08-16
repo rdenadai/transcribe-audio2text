@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+  <head>
+    <meta charset="utf-8" />
+    <title>Transcribe Audio2Text + Resumo</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link
+      rel="icon"
+      href="{{ url_for('static', path='favicon.ico') }}"
+      type="image/x-icon"
+    />
+    <link rel="stylesheet" href="{{ url_for('static', path='styles.css') }}" />
+  </head>
+  <body>
+    <div class="container">
+      <div class="card">
+        <div class="row">
+          <h1>Transcrever Áudio (MP3) e Gerar Resumo</h1>
+          <button id="theme-toggle" class="theme-toggle" title="Mudar tema">
+            ☀️
+          </button>
+        </div>
+        <p class="muted">
+          Faça upload de um arquivo MP3. O processamento pode levar alguns
+          minutos.
+        </p>
+        <form action="/upload" method="post" enctype="multipart/form-data">
+          <input
+            type="file"
+            name="file"
+            accept="audio/mpeg,audio/mp3"
+            required
+          />
+          <button type="submit">Enviar e Processar</button>
+        </form>
+      </div>
+      <div style="height: 16px"></div>
+
+      {% if error %}
+      <div class="card">
+        <p class="danger" style="padding: 10px; border-radius: 6px">
+          Erro: {{ error }}
+        </p>
+      </div>
+      {% elif transcript_html and summary_html %}
+      <div class="card">
+        <div class="row">
+          <h2>Resultado</h2>
+          <span class="small"
+            >Tempo: transcrição {{ t_transcribe|round(1) }}s • resumo {{
+            t_summarize|round(1) }}s</span
+          >
+        </div>
+        <div class="grid">
+          <div>
+            <h3>Transcrição</h3>
+            <div class="result-box">{{ transcript_html|safe }}</div>
+          </div>
+          <div>
+            <h3>Resumo</h3>
+            <div class="result-box">{{ summary_html|safe }}</div>
+          </div>
+        </div>
+      </div>
+      {% else %}
+      <div class="card">
+        <p class="small">Nenhum resultado ainda. Envie um MP3 para começar.</p>
+      </div>
+      {% endif %}
+    </div>
+    <script>
+      const themeToggle = document.getElementById("theme-toggle");
+      const htmlEl = document.documentElement;
+
+      const applyTheme = (theme) => {
+        if (theme === "light") {
+          htmlEl.setAttribute("data-theme", "light");
+          themeToggle.innerHTML = "🌙";
+        } else {
+          htmlEl.removeAttribute("data-theme");
+          themeToggle.innerHTML = "☀️";
+        }
+      };
+
+      document.addEventListener("DOMContentLoaded", () => {
+        const savedTheme = localStorage.getItem("theme") || "dark";
+        applyTheme(savedTheme);
+      });
+
+      themeToggle.addEventListener("click", () => {
+        const currentTheme = htmlEl.getAttribute("data-theme");
+        const newTheme = currentTheme === "light" ? "dark" : "light";
+        localStorage.setItem("theme", newTheme);
+        applyTheme(newTheme);
+      });
+    </script>
+  </body>
+</html>

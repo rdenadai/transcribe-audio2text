@@ -1,0 +1,26 @@
+[project]
+name = "transcribe-text2audio"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.11.11"
+dependencies = [
+    "accelerate",
+    "bitsandbytes>=0.47.0",
+    "fastapi[standard]>=0.116.1",
+    "jinja2>=3.1.6",
+    "markdown>=3.8.2",
+    "pillow>=11.2.1",
+    "pydantic-settings>=2.10.1",
+    "torch==2.7.1",
+    "transformers==4.52.4",
+    "uvicorn[standard]>=0.35.0",
+]
+
+[[tool.uv.index]]
+name = "pytorch-cu118"
+url = "https://download.pytorch.org/whl/cu118"
+explicit = true
+
+[dependency-groups]
+dev = ["ruff>=0.12.9"]

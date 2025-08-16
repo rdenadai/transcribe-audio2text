@@ -1,0 +1,172 @@
+:root {
+  --bg: #0f172a;
+  --panel: #111827;
+  --text: #e5e7eb;
+  --muted: #9ca3af;
+  --accent: #22c55e;
+  --danger: #ef4444;
+  --button-text: #052e16;
+  --border-color: #374151;
+  --pre-bg: #0b1220;
+  --pre-border: #1f2937;
+}
+html[data-theme="light"] {
+  --bg: #f8fafc;
+  --panel: #ffffff;
+  --text: #0f172a;
+  --muted: #64748b;
+  --accent: #22c55e;
+  --danger: #ef4444;
+  --button-text: #ffffff;
+  --border-color: #e2e8f0;
+  --pre-bg: #f1f5f9;
+  --pre-border: #e2e8f0;
+}
+html,
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto,
+    Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+  margin: 0;
+  padding: 0;
+  transition: background-color 0.2s, color 0.2s;
+  font-size: 14px; /* Base font size for mobile */
+}
+
+/* --- Layout --- */
+.container {
+  width: 90%;
+  margin: 0 auto;
+  padding: 16px 0; /* Less padding on mobile */
+}
+.card {
+  background: var(--panel);
+  border-radius: 12px;
+  padding: 16px; /* Less padding on mobile */
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  border: 1px solid var(--border-color);
+}
+.grid {
+  display: grid;
+  grid-template-columns: 1fr; /* Single column on mobile */
+  gap: 16px;
+}
+.row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+}
+
+/* --- Typography --- */
+h1 {
+  margin: 0 0 12px;
+  font-size: 1.4rem; /* Slightly smaller H1 for mobile */
+}
+p.muted {
+  color: var(--muted);
+  margin-top: 0;
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+.small {
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+
+/* --- Form & Buttons --- */
+form {
+  margin-top: 16px;
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  flex-wrap: wrap; /* Allows button to wrap on small screens */
+}
+input[type="file"] {
+  border: 1px solid var(--border-color);
+  padding: 10px;
+  border-radius: 8px;
+  background: var(--pre-bg);
+  color: var(--text);
+  flex-grow: 1; /* Allows input to take available space */
+}
+button {
+  background: var(--accent);
+  color: var(--button-text);
+  border: none;
+  padding: 10px 16px;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+}
+.theme-toggle {
+  padding: 6px;
+  background: var(--panel);
+  border: 1px solid var(--border-color);
+  color: var(--muted);
+  cursor: pointer;
+  border-radius: 6px;
+}
+.danger {
+  background: var(--danger);
+  color: #fff;
+}
+
+/* --- Result Box --- */
+.result-box {
+  background: var(--pre-bg);
+  border: 1px solid var(--pre-border);
+  padding: 12px;
+  border-radius: 8px;
+  max-height: 50vh; /* Adjusted height for mobile */
+  overflow: auto;
+  font-size: 0.95rem;
+}
+.result-box h1,
+.result-box h2,
+.result-box h3,
+.result-box h4 {
+  margin-top: 1em;
+  margin-bottom: 0.5em;
+}
+.result-box p {
+  margin-top: 0;
+  margin-bottom: 1em;
+  line-height: 1.6;
+}
+.result-box ul,
+.result-box ol {
+  padding-left: 20px;
+}
+
+/* --- Tablet and larger screens --- */
+@media (min-width: 768px) {
+  html,
+  body {
+    font-size: 16px; /* Standard base font size */
+  }
+  .container {
+    padding: 24px 0;
+  }
+  .card {
+    padding: 24px;
+  }
+  h1 {
+    font-size: 1.75rem; /* Larger H1 */
+  }
+  .result-box {
+    max-height: 60vh;
+  }
+}
+
+/* --- Desktop screens --- */
+@media (min-width: 992px) {
+  .container {
+    max-width: 1140px; /* Max width for large screens */
+  }
+  .grid {
+    grid-template-columns: 1fr 1fr; /* Two columns for the results */
+    gap: 24px;
+  }
+}
