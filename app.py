@@ -77,17 +77,7 @@ def upload_file(request: Request, file: UploadFile = File(...)):
     error = None
 
     try:
-        # transcript_text, summary_text, t_transcribe, t_summarize = process_audio(saved_path)
-        transcript_text = "Hey, how are you?"
-        summary_text = """* **Resumo:**
-  A transcrição contém apenas uma saudação inicial, onde a pessoa pergunta "Hey, how are you?". Não há desenvolvimento adicional de conteúdo, contexto ou troca de informações além da saudação.
-
-* **Pontos Chaves:**
-
-* Saudação: "Hey, how are you?"
-"""
-        t_transcribe = 0.0
-        t_summarize = 0.0
+        transcript_text, summary_text, t_transcribe, t_summarize = process_audio(saved_path)
         # Remove "think" part from summary if present (with start/end tags)
         summary_text = re.sub(r"<think>.*?</think>", "", summary_text, flags=re.IGNORECASE | re.DOTALL).strip()
 
