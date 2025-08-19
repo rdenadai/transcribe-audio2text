@@ -21,10 +21,16 @@ curl -LsSf https://astral.sh/uv/install.sh | sh
 After that in order to run the application, you need to install the required dependencies. You can do this using `uv` (a virtual environment manager).
 
 ```bash
-uv install
+uv sync
 ```
 
 > P.S.: Take a look at the `pyproject.toml` file, in particular the [[tool.uv.index]] section, because in my machine I had to add the `pytorch-cu118` index to be able to install the `torch` package. If you have a new NVIDIA GPU, you might need to change the index URL to match your CUDA version (or remove it if you don't need it).
+
+Install `ffmpeg` if you don't have it installed yet. This is required to convert audio files to mp3 format.
+
+```bash
+sudo apt install ffmpeg
+```
 
 ## Create a .env file
 
