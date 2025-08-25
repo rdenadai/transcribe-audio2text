@@ -13,7 +13,7 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from markupsafe import Markup
 
-from main import create_resume, transcribe_audio
+from src.model import AudioModel, TextModel
 
 templates = Jinja2Templates(directory="templates")
 
@@ -33,12 +33,15 @@ OUTPUT_DIR = os.path.join(os.getcwd(), "audio")
 os.makedirs(UPLOAD_DIR, exist_ok=True)
 os.makedirs(OUTPUT_DIR, exist_ok=True)
 
+audio_model = AudioModel()
+text_model = TextModel()
 
-def process_audio(file_path: str) -> Tuple[str, str, float, float]:
+
+async def process_audio(file_path: str) -> Tuple[str, str, float, float]:
     # Transcribe
     t0 = perf_counter()
     transcript_chunks = []
-    for chunk in transcribe_audio(file_path):
+    async for chunk in audio_model.execute(file_path):
         transcript_chunks.append(chunk.get("text", ""))
     t1 = perf_counter()
 
@@ -46,7 +49,7 @@ def process_audio(file_path: str) -> Tuple[str, str, float, float]:
 
     # Summarize
     summary_chunks = []
-    for piece in create_resume(transcript_text):
+    async for piece in text_model.execute(transcript_text):
         summary_chunks.append(piece)
     t2 = perf_counter()
 
@@ -59,7 +62,7 @@ def index(request: Request):
 
 
 @app.post("/upload", response_class=HTMLResponse)
-def upload_file(request: Request, file: UploadFile = File(...)):
+async def upload_file(request: Request, file: UploadFile = File(...)):
     if file.content_type not in {"audio/mpeg", "audio/mp3"} and not file.filename.lower().endswith(".mp3"):
         raise HTTPException(status_code=400, detail="Envie um arquivo MP3 válido.")
 
@@ -77,7 +80,7 @@ def upload_file(request: Request, file: UploadFile = File(...)):
     error = None
 
     try:
-        transcript_text, summary_text, t_transcribe, t_summarize = process_audio(saved_path)
+        transcript_text, summary_text, t_transcribe, t_summarize = await process_audio(saved_path)
         # Remove "think" part from summary if present (with start/end tags)
         summary_text = re.sub(r"<think>.*?</think>", "", summary_text, flags=re.IGNORECASE | re.DOTALL).strip()
 
